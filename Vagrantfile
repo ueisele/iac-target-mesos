@@ -9,10 +9,14 @@ cluster = {
   "worker3"    => { :groups => [], :ip => "192.168.17.120", :cpus => 4, :mem => 6144 }
 }
 
+groups = {
+  "zookeeper" => ["discovery1", "discovery2", "discovery3"]
+}
+
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   cluster.each_with_index do |(hostname, info), index|
-    
+
     config.vm.define hostname do |cfg|
       cfg.vm.hostname = hostname
       cfg.vm.box = "ubuntu/artful64"
@@ -35,6 +39,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Use :ansible or :ansible_local to
   # select the provisioner of your choice
   config.vm.provision :ansible do |ansible|
+    ansible.groups = groups
+    ansible.galaxy_role_file = 'requirements.yml'
     ansible.playbook = "provisioning/playbook.yml"
   end # end config
 

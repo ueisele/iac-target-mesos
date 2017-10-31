@@ -7,8 +7,8 @@
         - openjdk-8-jdk
 
 - name: Zookeeper cluster setup
-  hosts: zookeepers
+  hosts: zookeeper
   sudo: yes
   roles:
     - role: AnsibleShipyard.ansible-zookeeper
-      zookeeper_hosts: "{{groups['zookeepers']}}"
+      zookeeper_hosts: "{{groups['zookeeper']}}"
