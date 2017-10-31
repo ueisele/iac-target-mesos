@@ -1,0 +1,14 @@
+- name: Java setup
+  hosts: all
+  sudo: yes
+  roles:
+    - role: java
+      java_packages: 
+        - openjdk-8-jdk
+
+- name: Zookeeper cluster setup
+  hosts: zookeepers
+  sudo: yes
+  roles:
+    - role: AnsibleShipyard.ansible-zookeeper
+      zookeeper_hosts: "{{groups['zookeepers']}}"
