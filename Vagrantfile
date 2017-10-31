@@ -4,8 +4,8 @@ cluster = {
   "discovery1" => { :groups => ["zookeeper"], :ip => "192.168.17.10", :cpus => 2, :mem => 2048 },
   "discovery2" => { :groups => ["zookeeper"], :ip => "192.168.17.20", :cpus => 2, :mem => 2048 },
   "discovery3" => { :groups => ["zookeeper"], :ip => "192.168.17.30", :cpus => 2, :mem => 2048 },
-  "worker1"    => { :groups => [], :ip => "192.168.17.100", :cpus => 4, :mem => 6144 }
-  "worker2"    => { :groups => [], :ip => "192.168.17.110", :cpus => 4, :mem => 6144 }
+  "worker1"    => { :groups => [], :ip => "192.168.17.100", :cpus => 4, :mem => 6144 },
+  "worker2"    => { :groups => [], :ip => "192.168.17.110", :cpus => 4, :mem => 6144 },
   "worker3"    => { :groups => [], :ip => "192.168.17.120", :cpus => 4, :mem => 6144 }
 }
 
