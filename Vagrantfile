@@ -33,6 +33,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--pagefusion", "on"]
         vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
       end # end provider
+
+      cfg.vm.provision :shell, inline: "sed -i'' '/^127.0.0.1\\t#{hostname}/d' /etc/hosts"
+
     end # end config
     
   end # end cluster
@@ -40,6 +43,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
   config.hostmanager.manage_guest = true
+
+  config.vbguest.auto_update = false
 
   config.vm.provision :ansible do |ansible|
     ansible.galaxy_role_file = 'requirements.yml'
