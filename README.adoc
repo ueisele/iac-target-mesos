@@ -1,0 +1,8 @@
+= iac-vagrant-mesos
+
+== Ansible Ad-Hoc Commands
+
+[source,bash]
+----
+ansible all -i inventory -f 6 -m command -a 'ls -alh'
+----
