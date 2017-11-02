@@ -6,7 +6,7 @@ The cluster consists of three Mesos masters and three Mesos agents.
 [NOTE]
 ====
 Apache Mesos is a plain resource scheduler. Mesos itself does not support the execution of specific workload, like a shell command or a Docker container.
-This is only possible with specific Frameworks, for example 'Marathon' which supports the execution of shell commands or Docker container.
+This is only possible with specific Mesos frameworks, for example 'Marathon' which supports the execution of shell commands or Docker containers.
 ====
 
 == Prerequisites
@@ -17,7 +17,7 @@ This is only possible with specific Frameworks, for example 'Marathon' which sup
 
     vagrant plugin install vagrant-hostmanager
 
-. Clone
+. Clone repository
 
     git clone https://github.com/ueisele/iac-vagrant-mesos.git
     cd iac-vagrant-mesos
