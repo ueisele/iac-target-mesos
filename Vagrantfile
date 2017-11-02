@@ -11,6 +11,9 @@ cluster = {
 
 groups = {
   "zookeeper" => ["discovery1", "discovery2", "discovery3"],
+  "mesos-master" => ["discovery1", "discovery2", "discovery3"],
+  "mesos-agent" => ["worker1", "worker2", "worker3"],
+  "mesos:children" => ["mesos-master", "mesos-agent"],
   "all:vars"  => { :ansible_python_interpreter => "/usr/bin/python3" }
 }
 
