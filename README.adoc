@@ -1,7 +1,7 @@
 = Vagrant-Mesos
 
-This repository provides a Vagrant configuration that sets up a HA Apache Mesos Cluster with Apache ZooKeeper.
-The cluster consist of three Mesos masters and three Mesos agents.
+This repository provides a Vagrant configuration that sets up a Apache Mesos cluster in HA mode with Apache ZooKeeper.
+The cluster consists of three Mesos masters and three Mesos agents.
 
 [NOTE]
 ====
