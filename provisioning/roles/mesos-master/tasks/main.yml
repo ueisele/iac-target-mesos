@@ -1,0 +1,18 @@
+---
+- name: Apt install Mesos
+  apt:
+    deb: {{ mesos_deb_package_url }}
+  tags: bootstrap
+
+- name: Set Zookeeper
+  command: bash -c "echo zk://{% for host in zookeeper_hosts %}{% if loop.index > 1 %},{% endif %}{{host}}:2181{% endfor %}/mesos > /etc/mesos/zk"
+
+- name: Set Mesos Master configs
+  command: bash -c "echo {{ item.value }} > /etc/mesos-master/{{ item.key }}"
+  with_dict: "{{ config_mesos_master }}"
+
+- name: Service Mesos Master enabled and started
+  systemd:
+    name: mesos-master
+    enabled: yes
+    state: started
