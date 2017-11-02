@@ -1,124 +1,54 @@
 = Vagrant-Mesos
 
-== Dependencies
-
-vagrant-hostmanager
-
-== Run Ansible Playbooks and Ad-Hoc Commands
-
-The provided inventory at './inventory' can be used to run Ansible Playbooks and Ad-Hoc commands on the guests.
-
-[source,bash]
-----
-ansible all -i inventory -f 6 -m command -a 'ls -alh'
-----
-
-== Install Apache Mesos (HA)
-
-=== Download Apache Mesos Package from Mesosphere
-
-First, download the Apache Mesos Package from Mesosphere: https://open.mesosphere.com/downloads/mesos/
-Or add the Mesosphere Package Repository to your package manager: https://mesosphere.com/blog/mesosphere-package-repositories/
-
-.Download Apache Mesos Package for Ubuntu on all guests
-[source,bash]
-----
-ansible mesos -i inventory -f 6 -m command -a 'wget -P /tmp/ http://repos.mesosphere.com/ubuntu/pool/main/m/mesos/mesos_1.4.0-2.0.1.ubuntu1604_amd64.deb'
-----
-
-=== Install Apache Mesos Package
-
-Next, the downloaded package can be installed. 
-The Mesosphere packages also define the required dependecies. Therefore, ensure that the required dependecies are also installed.
-This, for example, can be achived with 'apt' on Debian based distributions.
-
-.Install Mesos package on all guests with 'apt'
-[source,bash]
-----
-ansible mesos -i inventory -f 6 --become -m command -a 'apt install -y /tmp/mesos_1.4.0-2.0.1.ubuntu1604_amd64.deb'
-----
-
-=== Clean Installation
-[source,bash]
-----
-ansible mesos -i inventory -f 6 --become -m command -a 'rm /tmp/mesos_1.4.0-2.0.1.ubuntu1604_amd64.deb'
-----
-
-=== Configure Mesos 
-[source,bash]
-----
-ansible mesos -i inventory -f 6 --become -m command -a 'bash -c "echo zk://discovery1:2181,discovery2:2181,discovery3:2181/mesos > /etc/mesos/zk"'
-ansible mesos-master -i inventory --become -m command -a 'bash -c "echo 2 > /etc/mesos-master/quorum"'
-----
-
-=== Enable and Start Mesos Master Systemd Service 
-[source,bash]
-----
-ansible mesos-master -i inventory --become -m command -a 'systemctl enable mesos-master.service'
-ansible mesos-master -i inventory -f 1 --become -m command -a 'systemctl start mesos-master.service'
-----
-
-=== Enable and Start Mesos Agent Systemd Service 
-[source,bash]
-----
-ansible mesos-agent -i inventory --become -m command -a 'systemctl enable mesos-slave.service'
-ansible mesos-agent -i inventory -f 1 --become -m command -a 'systemctl start mesos-slave.service'
-----
-
-=== Check
-Navigate to http://discovery1:5050/ in your browser. This should show the status UI of Apache Mesos. It should outline 3 activated agents on the left side.
-
-To redirect to the Mesos leader type: http://discovery1:5050/redirect
-
-=== Throubleshooting
-If it does not work as expected, Mesos log messages can be read with the Journald service.
-
-[source,bash]
-----
-ansible discovery1 -i inventory --become -m command -a 'journalctl -u zookeeper'
-ansible discovery1 -i inventory --become -m command -a 'journalctl -u mesos-master'
-ansible worker1 -i inventory --become -m command -a 'journalctl -u mesos-agent'
-----
-
-If you want a continous stream, you have to login to the guest node.
-
-[source,bash]
-----
-vagrant ssh discovery1
-ubuntu@discovery1:~$ journalctl -u mesos-master -f
-----
-
-==== Apache Mesos restarts every minute
-If Apache Mesos restarts continously, shutdown all Mesos masters and agents, and delete the work directory, as well as the Zookeeper entry.
-
-[source,bash]
-----
-ansible mesos-agent -i inventory --become -m command -a 'systemctl stop mesos-slave.service'
-ansible mesos-master -i inventory --become -m command -a 'systemctl stop mesos-master.service'
-ansible mesos -i inventory -f 6 --become -m file -a 'path=/var/lib/mesos state=absent'
-ansible discovery1 -i inventory -m command -a '/opt/zookeeper-3.4.9/bin/zkCli.sh -server discovery1 rmr /mesos/'
-ansible discovery1 -i inventory -m command -a '/opt/zookeeper-3.4.9/bin/zkCli.sh -server discovery1 rmr /mesos'
-----
-
-Now, the Apache Mesos masters and agents can be started again.
-
-== Test Apache Mesos installation
-
-=== Throubleshooting
-
-==== Execution hangs
-
-Execution of framework blocks at 'No credentials provided. Attempting to register without authentication'.
-
-* Try to set environment variable LIBPROCESS_IP to the address of the interface that listens to responses. In this example this is the VirtualBox interface of the private network.
-* Set a Firewall rule that allowes incoming TCP traffic from the interface that corresponds to the Address specified at LIBPROCESS_IP
-
-== Work with Apache Mesos
-
-Mesos provides a HTTP API (application/json and application/x-protobuf), as well as APIs for several languages.
+This repository provides a Vagrant configuration that sets up a HA Apache Mesos Cluster with Apache ZooKeeper.
+The cluster consist of three Mesos masters and three Mesos agents.
 
 [NOTE]
 ====
 Apache Mesos is a plain resource scheduler. Mesos itself does not support the execution of specific workload, like a shell command or a Docker container.
 This is only possible with specific Frameworks, for example 'Marathon' which supports the execution of shell commands or Docker container.
 ====
+
+== Prerequisites
+
+. Install Git, Vagrant, and VirtualBox
+
+. Install the vagrant-hostmanager plugin
+
+    vagrant plugin install vagrant-hostmanager
+
+. Clone
+
+    git clone https://github.com/ueisele/iac-vagrant-mesos.git
+    cd iac-vagrant-mesos
+
+== Quick Start
+
+. Start and Provision the Cluster
+
+    ./up.sh
+
+. Access the Apache Mesos UI
+
+    http://discovery1:5050/
+
+. Finally, destroy the Cluster
+
+    ./destroy.sh
+
+== Run Ansible Playbooks and Ad Hoc Commands
+
+The provided inventory at './.vagrant/provisioners/ansible/inventory' can be used to run Ansible playbooks and ad hoc commands at the guest nodes.
+The inventory is auto generated by Vagrant if the command `vagrant up` or `vagrant provision` is called.
+
+[source,bash]
+----
+ansible all -i .vagrant/provisioners/ansible/inventory -m command -a 'ls -alh'
+----
+
+== Mesos Vagrant Documentation
+
+* link:doc/build-mesos.adoc[Build and Install Apache Mesos form Source]
+* link:doc/ansible-adhoc-mesos.adoc[Install Apache Mesos with Ansible Ad Hoc Commands]
+* link:doc/execute-task-mesos.adoc[Work with Apache Mesos]
+* link:doc/troubleshooting-mesos.adoc[Throubleshooting]
