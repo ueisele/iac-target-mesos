@@ -1,8 +1,40 @@
-= iac-vagrant-mesos
+= Vagrant-Mesos
 
-== Ansible Ad-Hoc Commands
+== Run Ansible Playbooks and Ad-Hoc Commands
+
+The provided inventory at './inventory' can be used to run Ansible Playbooks and Ad-Hoc commands on the guests.
 
 [source,bash]
 ----
 ansible all -i inventory -f 6 -m command -a 'ls -alh'
+----
+
+== Install Apache Mesos (HA)
+
+=== Download Apache Mesos Package from Mesosphere
+
+First download the Apache Mesos Package from Mesosphere: https://open.mesosphere.com/downloads/mesos/
+
+.Download Apache Mesos Package for Ubuntu on all guests
+[source,bash]
+----
+ansible mesos -i inventory -f 6 -m command -a 'wget -P /tmp/ http://repos.mesosphere.com/ubuntu/pool/main/m/mesos/mesos_1.4.0-2.0.1.ubuntu1604_amd64.deb'
+----
+
+=== Install Apache Mesos Package
+
+Next, the downloaded package can be installed. 
+The Mesosphere packages also define the required dependecies. Therefore, ensure that the required dependecies are also installed.
+This, for example, can be achived with 'apt' on Debian based distributions.
+
+.Install Mesos package on all guests with 'apt'
+[source,bash]
+----
+ansible mesos -i inventory -f 6 --become -m command -a 'apt install -y /tmp/mesos_1.4.0-2.0.1.ubuntu1604_amd64.deb'
+----
+
+=== Clean Installation
+[source,bash]
+----
+ansible mesos -i inventory -f 6 --become -m command -a 'rm /tmp/mesos_1.4.0-2.0.1.ubuntu1604_amd64.deb'
 ----
