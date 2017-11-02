@@ -21,4 +21,4 @@
     - role: mesos-master
       zookeeper_hosts: "{{ groups['zookeeper'] }}"   
       config_mesos_master:
-        quorum: {{ ((groups['zookeeper'] | length) / 2) | round | int }}
+        quorum: "{{ ((groups['zookeeper'] | length) / 2) | round | int }}"

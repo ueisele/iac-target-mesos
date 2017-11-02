@@ -1,7 +1,7 @@
 #!/bin/bash
-sh-keygen -R discovery1
-sh-keygen -R discovery2
-sh-keygen -R discovery3
-sh-keygen -R worker1
-sh-keygen -R worker2
-sh-keygen -R worker3
+ssh-keygen -R discovery1
+ssh-keygen -R discovery2
+ssh-keygen -R discovery3
+ssh-keygen -R worker1
+ssh-keygen -R worker2
+ssh-keygen -R worker3

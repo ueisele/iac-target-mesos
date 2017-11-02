@@ -1,7 +1,7 @@
 ---
 - name: Apt install Mesos
   apt:
-    deb: {{ mesos_deb_package_url }}
+    deb: "{{ mesos_deb_package_url }}"
   tags: bootstrap
 
 - name: Set Zookeeper

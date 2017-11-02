@@ -13,8 +13,7 @@ groups = {
   "zookeeper" => ["discovery1", "discovery2", "discovery3"],
   "mesos-master" => ["discovery1", "discovery2", "discovery3"],
   "mesos-agent" => ["worker1", "worker2", "worker3"],
-  "mesos:children" => ["mesos-master", "mesos-agent"],
-  "all:vars"  => { :ansible_python_interpreter => "/usr/bin/python3" }
+  "mesos:children" => ["mesos-master", "mesos-agent"]
 }
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
@@ -23,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     config.vm.define hostname do |cfg|
       cfg.vm.hostname = hostname
-      cfg.vm.box = "ubuntu/xenial64"
+      cfg.vm.box = "debian/contrib-stretch64"
   
       cfg.vm.network :private_network, ip: info[:ip]
       
