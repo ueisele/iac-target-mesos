@@ -1,5 +1,5 @@
 ---
-- name: Apt install Mesos
+- name: Apt Install Mesos
   apt:
     deb: "{{ mesos_deb_package_url }}"
   tags: bootstrap
@@ -7,12 +7,12 @@
 - name: Set Zookeeper
   command: bash -c "echo zk://{% for host in zookeeper_hosts %}{% if loop.index > 1 %},{% endif %}{{host}}:2181{% endfor %}/mesos > /etc/mesos/zk"
 
-- name: Set Mesos Master Configs
-  command: bash -c "echo {{ item.value }} > /etc/mesos-master/{{ item.key }}"
-  with_dict: "{{ config_mesos_master }}"
+- name: Set Mesos Agent Configs
+  command: bash -c "echo {{ item.value }} > /etc/mesos-slave/{{ item.key }}"
+  with_dict: "{{ config_mesos_agent }}"
 
-- name: Service Mesos Master Enabled and Started
+- name: Service Mesos Agent Enabled and Started
   systemd:
-    name: mesos-master
+    name: mesos-slave
     enabled: yes
     state: started

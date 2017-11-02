@@ -22,3 +22,11 @@
       zookeeper_hosts: "{{ groups['zookeeper'] }}"   
       config_mesos_master:
         quorum: "{{ ((groups['zookeeper'] | length) / 2) | round | int }}"
+
+- name: Mesos Agent Cluster Setup
+  hosts: mesos-agent
+  become: yes
+  roles:
+    - role: mesos-agent
+      zookeeper_hosts: "{{ groups['zookeeper'] }}"   
+      config_mesos_agent: {}
