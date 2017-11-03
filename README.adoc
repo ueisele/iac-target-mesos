@@ -62,4 +62,6 @@ ansible all -i .vagrant/provisioners/ansible/inventory -m command -a 'ls -alh'
 ** Show Mesos frameworks for different kind of workloads, like Marathon for Docker and Spark for cluster computing.
 * Develop a custom Mesos framework.
 ** Introduction to Mesos framework development and a closer look on Mesos internals.
+* Mesos agent on windows.
+** Run Windows and Linux Docker container in a single Mesos cluser.
 * Use lightweight Vagrant box to improve startup performance.
