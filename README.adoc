@@ -52,3 +52,14 @@ ansible all -i .vagrant/provisioners/ansible/inventory -m command -a 'ls -alh'
 * link:doc/ansible-adhoc-mesos.adoc[Install Apache Mesos with Ansible Ad Hoc Commands]
 * link:doc/execute-task-mesos.adoc[Work with Apache Mesos]
 * link:doc/troubleshooting-mesos.adoc[Throubleshooting]
+
+== Prospect
+
+* Extract Ansible roles for Mesos in separate repository.
+** Test driven infrastructure as code development.
+* Add Ansible roles for several Mesos frameworks.
+** Use this as environment to test and examine Mesos frameworks.
+** Show Mesos frameworks for different kind of workloads, like Marathon for Docker and Spark for cluster computing.
+* Develop a custom Mesos framework.
+** Introduction to Mesos framework development and a closer look on Mesos internals.
+* Use lightweight Vagrant box to improve startup performance.
