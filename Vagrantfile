@@ -36,18 +36,18 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
       end # end provider
 
-      cfg.vm.provision :shell, inline: "sed -i'' '/^127.0.0.1\\t#{hostname}/d' /etc/hosts"
-
-      cfg.vm.provision :ansible do |ansible|
-        ansible.galaxy_role_file = 'requirements.yml'
-        ansible.galaxy_roles_path = 'provisioning/roles-galaxy'
-        ansible.groups = groups   
-        ansible.playbook = "provisioning/playbook.yml"
-      end # end provision
-
     end # end config
     
   end # end cluster
+
+  config.vm.provision :shell, inline: "sed -i \"/^127.0.0.1\\t$(hostname)/d\" /etc/hosts"
+
+  config.vm.provision :ansible do |ansible|
+    ansible.galaxy_role_file = 'requirements.yml'
+    ansible.galaxy_roles_path = 'provisioning/roles-galaxy'
+    ansible.groups = groups   
+    ansible.playbook = "provisioning/playbook.yml"
+  end # end provision
 
   config.hostmanager.enabled = true
   config.hostmanager.manage_host = true
