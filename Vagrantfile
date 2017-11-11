@@ -31,7 +31,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vb.name = hostname
         vb.cpus = info[:cpus]
         vb.memory = info[:mem]
-        vb.customize ["modifyvm", :id, "--ostype", "Ubuntu_64"]
+        vb.customize ["modifyvm", :id, "--ostype", "Debian_64"]
         vb.customize ["modifyvm", :id, "--pagefusion", "on"]
         vb.customize ["modifyvm", :id, "--hwvirtex", "on"]
       end # end provider
