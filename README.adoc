@@ -1,4 +1,6 @@
-= Vagrant-Mesos
+= Vagrant-Mesos (Deprecated)
+
+Use https://github.com/ueisele/iac-vagrant-platform instead
 
 This repository provides a Vagrant configuration that sets up a Apache Mesos cluster in HA mode with Apache ZooKeeper.
 The cluster consists of three Mesos masters and three Mesos agents.
